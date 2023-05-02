@@ -1,6 +1,6 @@
 # assignment
 
-Commands to run
+Commands to run:
 npm start to run frontend folder, npm run server to run backend folder
 
 Technologies used: 
