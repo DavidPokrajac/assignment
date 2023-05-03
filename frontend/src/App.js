@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { SearchBar } from './components';
 import { SideBar } from './components';
+import { SearchResults } from './components';
 import './App.css';
 import axios from 'axios';
 import { FiArrowRight } from 'react-icons/fi';
@@ -49,20 +50,23 @@ const App = () => {
     setPreviousQueries(prevQueries => [...prevQueries, term]);
 
     const options = {
-        method: 'GET',
-        url: 'http://localhost:5000/api',
-        params: {level: term},
+      method: 'GET',
+      url: 'http://localhost:5000/api',
+      params: {level: term},
     }
 
     axios.request(options).then((response) => {
-        const { RelatedTopics } = response.data;
-        const filterTopics = RelatedTopics.filter(r => !r.Topics);
-        const related = RelatedTopics.filter(r => r.Topics);
-        const [{ Topics }] = related;
-        setSearchResults([...filterTopics, ...Topics]);
+      const { RelatedTopics } = response.data;
+      const mainTopics = RelatedTopics.filter(r => !r.Topics);
+      const subTopics = RelatedTopics.filter(r => r.Topics);
+      setSearchResults(
+        subTopics.length === 0 ? 
+          [...mainTopics] : 
+          [...mainTopics, ...subTopics[0]['Topics']]
+      );
     }).catch((error) => {
-        console.log(error)
-    })
+        console.log(error);
+    });
   }
 
   const onRepeatQuery = (value) => {
@@ -76,20 +80,29 @@ const App = () => {
 
     axios.request(options).then((response) => {
       const { RelatedTopics } = response.data;
-      const filterTopics = RelatedTopics.filter(r => !r.Topics);
-      const related = RelatedTopics.filter(r => r.Topics);
-      const [{ Topics }] = related;
-      setSearchResults([...filterTopics, ...Topics]);
+      const mainTopics = RelatedTopics.filter(r => !r.Topics);
+      const subTopics = RelatedTopics.filter(r => r.Topics);
+      setSearchResults(
+        subTopics.length === 0 ? 
+          [...mainTopics] : 
+          [...mainTopics, ...subTopics[0]['Topics']]
+      );
     }).catch((error) => {
       console.log(error);
-    })
+    });
+  }
+
+  const removeAllQueries = () => {
+    localStorage.removeItem('previous-searches');
+    setPreviousQueries([]);
   }
 
   return (
     <>
-      <SearchBar term={term} onChangeHandler={letterChangeHandler} onSubmitHandler={submitQueryHandler} searchResults={searchResults} />
+      <SearchBar term={term} onChangeHandler={letterChangeHandler} onSubmitHandler={submitQueryHandler} />
+      <SearchResults searchResults={searchResults} term={term} />
       <button ref={buttonRef} className='see-past' onClick={onSidebarHandler}><FiArrowRight /></button>
-      <SideBar open={isOpen} previousQueries={previousQueries} onRepeatQuery={onRepeatQuery} />
+      <SideBar open={isOpen} previousQueries={previousQueries} onRepeatQuery={onRepeatQuery} onRemoveHandler={removeAllQueries} />
     </>
   );
 }

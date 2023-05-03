@@ -1,9 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import '../styles/SideBar.module.css';
 import { v4 as uuidv4 } from 'uuid';
+import { AiFillCloseCircle } from "react-icons/ai";
 
-const SideBar = ({ previousQueries, onRepeatQuery, open }) => {
+const SideBar = ({ previousQueries, onRepeatQuery, onRemoveHandler, open }) => {
     const sidebarRef = useRef(null);
+
+    const prevQueries = previousQueries.map(prevQuery => <button key={uuidv4()} onClick={() => onRepeatQuery(prevQuery)}>{prevQuery}</button>);
 
     useEffect(() => {
         if(open) {
@@ -17,9 +20,12 @@ const SideBar = ({ previousQueries, onRepeatQuery, open }) => {
     return(
         <aside className='sidebar' ref={sidebarRef}>
             <h2>Past queries</h2>
-            {previousQueries.length ? previousQueries.map(prevQuery => {
-                return <button key={uuidv4()} onClick={() => onRepeatQuery(prevQuery)}>{prevQuery}</button>
-            }) : <p>No queries.</p>}
+            {previousQueries.length ? prevQueries : <p>No queries.</p>}
+            {previousQueries.length ? (
+                <button onClick={onRemoveHandler}>
+                    <AiFillCloseCircle />Remove All<AiFillCloseCircle />
+                </button>
+            ) : ''}
         </aside>
     );
 }

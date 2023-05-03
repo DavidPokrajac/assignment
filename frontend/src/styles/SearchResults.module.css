@@ -1,0 +1,22 @@
+ul {
+    list-style-type: none;
+    margin-top: 25px;
+    width: 55%;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 25%;
+}
+
+ul li {
+    margin-bottom: 10px;
+    line-height: 25px;
+}
+
+.no-results {
+    text-align: center;
+}
+
+ul li a {
+    margin-right: 10px;
+}

@@ -15,12 +15,14 @@ h2 {
 }
 
 button {
-    display: inline-block;
+    display: flex;
     width: 100%;
     background-color: transparent;
     border: none;
     padding: 10px 0;
     font-size: 16px;
+    justify-content: space-evenly;
+    align-items: center;
 }
 
 button:hover {
@@ -31,4 +33,9 @@ button:hover {
 p {
     margin-top: 30px;
     text-align: center;
+}
+
+svg {
+    font-size: 30px;
+    color: rgb(231, 142, 142);
 }

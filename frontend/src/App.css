@@ -26,7 +26,11 @@ li {
   top: 5%;
   background-color: transparent;
   border: none;
-  font-size: 25px;
+}
+
+.see-past > svg {
+  transform: scale(1.25);
+  color: initial;
 }
   
 .see-past:hover {
